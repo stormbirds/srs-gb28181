@@ -2176,9 +2176,13 @@ srs_error_t SrsGb28181Manger::delete_stream_channel(std::string id, std::string 
 
     //notify the device to stop streaming 
     //if an internal sip service controlled channel
-    notify_sip_bye(id, chid);
-
-    string channel_id = id + "@" + chid;
+    string channel_id;
+    if (sip_service){
+        notify_sip_bye(id, chid);
+        channel_id = id + "@" + chid;
+    }else{
+        channel_id = chid;
+    }
 
     SrsGb28181RtmpMuxer *muxer = fetch_rtmpmuxer(channel_id);
     if (muxer){
